@@ -62,13 +62,13 @@
     }
     protected override async Task OnInitializedAsync()
     {
-        listaRevistas = await localStorage.GetItemAsync<List<ClaseAnimalAves>>("listaAnimalesAves");
+        listaRevistas = await localStorage.GetItemAsync<List<Revistas>>("listaAnimalesAves");
 
-        if (listaAnimalesAves == null)
+        if (listaRevistas == null)
         {
-            listaAnimalesAves = new List<ClaseAnimalAves>();
+            listaRevistas = new List<Revistas>();
         }
-        animalAves = listaAnimalesAves.FirstOrDefault(c => c.NombreAnimal == nombre);
+        //libroRevistas = listaRevistas.FirstOrDefault(c => c.listaRevistas == nombre);
     }
 
 
