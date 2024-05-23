@@ -1,0 +1,118 @@
+﻿@page "/IngresoRevistas"
+
+<h3>IngresoRevistas</h3>
+
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject NavigationManager NavigationManager
+
+
+<EditForm Model="@libroRevista" OnValidSubmit="@GuardarRev">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div>
+        <label for="titulo">Título: </label>
+        <InputText id="titulo" @bind-Value="libroRevista.titulo" class="form-control" />
+        <ValidationMessage For="() => libroRevista.titulo" />
+    </div>
+
+    <div>
+        <label for="autor">Autor: </label>
+        <InputText id="autor" @bind-Value="libroRevista.autor" class="form-control" />
+        <ValidationMessage For="() => libroRevista.autor" />
+    </div>
+    <div>
+        <label for="genero">Género: </label>
+        <InputText id="genero" @bind-Value="libroRevista.genero" class="form-control" />
+        <ValidationMessage For="() => libroRevista.genero" />
+    </div>
+    <div>
+        <label for="añoPublicacion">Año: </label>
+        <InputText id="añoPublicacion" @bind-Value="libroRevista.añoPublicacion" class="form-control" />
+        <ValidationMessage For="() => libroRevista.añoPublicacion" />
+    </div>
+    <div>
+        <label for="volumen">Volumen: </label>
+        <InputText id="volumen" @bind-Value="libroRevista.volumen" class="form-control" />
+        <ValidationMessage For="() => libroRevista.volumen" />
+    </div>
+    <div>
+        <label for="numeroEjemplar">Ejemplar: </label>
+        <InputText id="numeroEjemplar" @bind-Value="libroRevista.numeroEjemplar" class="form-control" />
+        <ValidationMessage For="() => libroRevista.numeroEjemplar" />
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-danger">Guardar</button>
+    </div>
+    
+
+</EditForm>
+
+
+
+@if (listaRevistas != null)
+{
+<table class="table">
+    <thead>
+        <tr>
+            <th>Titulo</th>
+            <th>Autor</th>
+            <th>Genero</th>
+            <th>Fecha Publicacion</th>
+            <th>Volumen</th>
+            <th>Numero de Ejemplar</th>
+            <th>Editar</th>
+            <th>Borrar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var unaRevista in listaRevistas)
+        {
+            <tr>
+                <td>@unaRevista.titulo</td>
+                <td>@unaRevista.autor</td>
+                <td>@unaRevista.genero</td>
+                <td>@unaRevista.añoPublicacion</td>
+                <td>@unaRevista.volumen</td>
+                <td>@unaRevista.numeroEjemplar</td>
+                <td><button class="btn btn-warning" @onclick="@(() => NavigationManager.NavigateTo($"/RevistaEditar/{unaRevista.titulo}"))">editar</button></td>
+                <td><button class="btn btn-danger" @onclick="@(() => Borrar(unaRevista.titulo))">Borrar</button></td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+}
+
+@code {
+
+    Revistas libroRevista = new Revistas();
+    List<Revistas> listaRevistas = new List<Revistas>();
+
+
+
+    protected async Task GuardarRev()
+    {
+        listaRevistas.Add(libroRevista);
+        libroRevista = new Revistas();
+
+        await localStorage.SetItemAsync("listaAnimales", listaRevistas);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        listaRevistas = await localStorage.GetItemAsync<List<Revistas>>("listaRevistas");
+
+        if (listaRevistas == null)
+        {
+            listaRevistas = new List<Revistas>();
+        }
+
+    }
+
+    protected async Task Borrar(string nmb)
+    {
+        listaRevistas.Remove(listaRevistas.First(c => c.titulo == nmb));
+        await localStorage.SetItemAsync("listaRevistas", listaRevistas);
+    }
+
+}

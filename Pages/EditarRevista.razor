@@ -1,0 +1,75 @@
+﻿@page "/RevistaEditar/{nombre}"
+
+
+<h3>EditarRevista</h3>
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject NavigationManager NavigationManager
+
+
+<EditForm Model="@libroRevista" OnValidSubmit="@Guardar">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div>
+        <label for="titulo">Título: </label>
+        <InputText id="titulo" @bind-Value="libroRevista.titulo" class="form-control" />
+        <ValidationMessage For="() => libroRevista.titulo" />
+    </div>
+
+    <div>
+        <label for="autor">Autor: </label>
+        <InputText id="autor" @bind-Value="libroRevista.autor" class="form-control" />
+        <ValidationMessage For="() => libroRevista.autor" />
+    </div>
+    <div>
+        <label for="genero">Género: </label>
+        <InputText id="genero" @bind-Value="libroRevista.genero" class="form-control" />
+        <ValidationMessage For="() => libroRevista.genero" />
+    </div>
+    <div>
+        <label for="añoPublicacion">Año: </label>
+        <InputText id="añoPublicacion" @bind-Value="libroRevista.añoPublicacion" class="form-control" />
+        <ValidationMessage For="() => libroRevista.añoPublicacion" />
+    </div>
+    <div>
+        <label for="volumen">Volumen: </label>
+        <InputText id="volumen" @bind-Value="libroRevista.volumen" class="form-control" />
+        <ValidationMessage For="() => libroRevista.volumen" />
+    </div>
+    <div>
+        <label for="numeroEjemplar">Ejemplar: </label>
+        <InputText id="numeroEjemplar" @bind-Value="libroRevista.numeroEjemplar" class="form-control" />
+        <ValidationMessage For="() => libroRevista.numeroEjemplar" />
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-danger">Guardar</button>
+    </div>
+
+
+</EditForm>
+
+
+@code {
+
+    Revistas libroRevista = new Revistas();
+    List<Revistas> listaRevistas = new List<Revistas>();
+    [Parameter]
+
+    public string nombre { get; set; }
+    protected async Task GuardarRev()
+    {
+        await localStorage.SetItemAsync("listaRevistas", listaRevistas);
+        NavigationManager.NavigateTo("/IngresoRevistas");
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        listaRevistas = await localStorage.GetItemAsync<List<ClaseAnimalAves>>("listaAnimalesAves");
+
+        if (listaAnimalesAves == null)
+        {
+            listaAnimalesAves = new List<ClaseAnimalAves>();
+        }
+        animalAves = listaAnimalesAves.FirstOrDefault(c => c.NombreAnimal == nombre);
+    }
+
+
+}
