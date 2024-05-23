@@ -6,7 +6,7 @@
 @inject NavigationManager NavigationManager
 
 
-<EditForm Model="@libroRevista" OnValidSubmit="@Guardar">
+<EditForm Model="@libroRevista" OnValidSubmit="@GuardarRev">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div>
@@ -62,13 +62,13 @@
     }
     protected override async Task OnInitializedAsync()
     {
-        listaRevistas = await localStorage.GetItemAsync<List<Revistas>>("listaAnimalesAves");
+        listaRevistas = await localStorage.GetItemAsync<List<Revistas>>("listaRevistas");
 
         if (listaRevistas == null)
         {
             listaRevistas = new List<Revistas>();
         }
-        //libroRevistas = listaRevistas.FirstOrDefault(c => c.listaRevistas == nombre);
+        libroRevista = listaRevistas.FirstOrDefault(c => c.titulo == nombre);
     }
 
 
