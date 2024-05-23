@@ -95,7 +95,7 @@
         listaRevistas.Add(libroRevista);
         libroRevista = new Revistas();
 
-        await localStorage.SetItemAsync("listaAnimales", listaRevistas);
+        await localStorage.SetItemAsync("listaRevistas", listaRevistas);
     }
 
     protected override async Task OnInitializedAsync()
